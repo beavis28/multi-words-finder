@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Multi Words Search",
+  "version": "1.0.0",
+  "description": "An easy way to search multiple words in the document.",
+  "icons": {
+    "16": "img/search.png",
+    "48": "img/search.png"
+  },
+  "action": {
+    "default_logo": {
+      "38": "img/search.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>", "file://*/*"],
+      "js": [
+        "libs/jquery.js",
+        "libs/jquery.highlight.js",
+        "js/content_scripts.js"
+      ],
+      "css": ["css/highlight.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["https://*/*", "http://*/*"]
+}

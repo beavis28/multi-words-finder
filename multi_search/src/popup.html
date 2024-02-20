@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Multi Words Search Popup</title>
+    <link rel="stylesheet" href="css/popup.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="input-wrap">
+        <div class="title-box">
+          <h1 class="title">Multi Words Search</h1>
+        </div>
+        <div class="highlight-words">
+          <input
+            type="text"
+            id="highlightWords"
+            placeholder="Detach each word using |"
+            autofocus
+          />
+          <button class="close-btn" id="closeBtn">
+            <img src="img/close.png" alt="Close Icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="libs/jquery.js"></script>
+    <script src="libs/jquery.highlight.js"></script>
+    <script src="js/popup.js"></script>
+  </body>
+</html>
