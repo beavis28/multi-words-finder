@@ -2,7 +2,7 @@ defaultSettings = {
   latest_keywords: [],
 };
 
-var detached = "|";
+var detached = "*";
 
 window.addEventListener("load", function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -70,8 +70,8 @@ function handleHighlightWords(tabkey, option = {}, callback = null) {
       inputKws = keywordsFromStr(inputStr, settings);
       savedKws = tabinfo.keywords;
 
-      addedKws = KeywordsMinus(inputKws, savedKws);
-      removedKws = KeywordsMinus(savedKws, inputKws);
+      addedKws = keywordsMinus(inputKws, savedKws);
+      removedKws = keywordsMinus(savedKws, inputKws);
 
       chrome.tabs.sendMessage(
         tabId,
@@ -96,23 +96,35 @@ function handleHighlightWords(tabkey, option = {}, callback = null) {
   });
 }
 
-function keywordsFromStr(inputStr) {
+function keywordsFromStr(inputStr, settings) {
   return inputStr
-    .split(detached)
+    .split(/\n/g)
     .filter((i) => i)
-    .map((kws, cnt) => {
-      return { kwGrp: cnt % 20, kwStr: kws };
-    });
+    .reduce((arr, line, lineCnt) => {
+      arr = arr.concat(
+        line
+          .split(detached)
+          .filter((i) => i)
+          .map((kws) => {
+            return { kwGrp: lineCnt % 20, kwStr: kws };
+          })
+      );
+      console.log(arr);
+      return arr;
+    }, []);
 }
-function keywordsToStr(kws) {
+
+function keywordsToStr(kws, settings) {
   var str = "";
-
-  str = kws.map((kw) => kw.kwStr).join(detached);
-  str += str ? detached : "";
-
+  for (var i = 0, len = kws.length - 1; i < len; ++i) {
+    str += kws[i].kwStr + (kws[i].kwGrp != kws[i + 1].kwGrp ? "\n" : detached);
+  }
+  // and the last one
+  kws.length && (str += kws[kws.length - 1].kwStr);
   return str;
 }
-function KeywordsMinus(kwListA, kwListB) {
+
+function keywordsMinus(kwListA, kwListB) {
   function KwListContain(kwList, kwA) {
     for (const kw of kwList) {
       if (kw.kwStr === kwA.kwStr && kw.kwGrp === kwA.kwGrp) {
