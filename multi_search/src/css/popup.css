@@ -132,3 +132,7 @@ body {
 #newlineNewColorLabel {
   color: white;
 }
+
+.tip p {
+  color: white;
+}
